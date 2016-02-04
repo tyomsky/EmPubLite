@@ -8,6 +8,8 @@ android {
         applicationId "com.tyomsky.empublite"
         versionCode 1
         versionName "1.0"
+        targetSdkVersion 23
+        minSdkVersion 16
     }
 }
 
