@@ -6,16 +6,20 @@ public class BookContents {
     String title;
     List<BookContents.Chapter> chapters;
 
-    int getChapterCount() {
+    public int getChapterCount() {
         return chapters.size();
     }
 
-    String getChapterFile(int position) {
+    public String getChapterFile(int position) {
         return chapters.get(position).file;
     }
 
-    String getTitle() {
+    public String getTitle() {
         return title;
+    }
+
+    public String getChapterTitle(int position) {
+        return chapters.get(position).title;
     }
 
     static class Chapter {

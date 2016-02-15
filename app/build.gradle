@@ -18,4 +18,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.retrofit:retrofit:1.8.0'
     compile 'com.android.support:support-v13:23.1.1'
+    compile 'io.karim:materialtabs:2.0.2'
 }

@@ -11,7 +11,7 @@ import android.webkit.WebViewFragment;
 public class SimpleContentFragment extends WebViewFragment {
     private static final String KEY_FILE = "file";
 
-    protected static SimpleContentFragment newInstatnce(String file) {
+    protected static SimpleContentFragment newInstance(String file) {
         SimpleContentFragment f = new SimpleContentFragment();
         Bundle args = new Bundle();
 

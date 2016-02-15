@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class ModelFragment extends Fragment{
+
     private BookContents contents;
 
     @Override
@@ -30,6 +31,10 @@ public class ModelFragment extends Fragment{
         if (contents == null) {
             new LoadThread(context.getAssets()).start();
         }
+    }
+
+    public BookContents getBook() {
+        return contents;
     }
 
     private class LoadThread extends Thread {
