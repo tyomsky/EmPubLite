@@ -10,4 +10,10 @@
         android:icon="@mipmap/ic_info_black_48dp"
         android:title="@string/about">
     </item>
+    <item
+        android:id="@+id/settings"
+        android:showAsAction="never"
+        android:title="@string/settings">
+    </item>
+
 </menu>

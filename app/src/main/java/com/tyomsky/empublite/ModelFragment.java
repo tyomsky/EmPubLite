@@ -2,8 +2,10 @@ package com.tyomsky.empublite;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.tyomsky.empublite.event.BookLoadedEvent;
@@ -16,6 +18,7 @@ import java.io.InputStreamReader;
 
 public class ModelFragment extends Fragment{
 
+    SharedPreferences prefs;
     private BookContents contents;
 
     @Override
@@ -29,7 +32,7 @@ public class ModelFragment extends Fragment{
         super.onAttach(context);
 
         if (contents == null) {
-            new LoadThread(context.getAssets()).start();
+            new LoadThread(context).start();
         }
     }
 
@@ -38,19 +41,20 @@ public class ModelFragment extends Fragment{
     }
 
     private class LoadThread extends Thread {
-        private AssetManager assets;
+        private Context context;
 
-        public LoadThread(AssetManager assets) {
+        public LoadThread(Context context) {
             super();
-            this.assets=assets;
+            this.context=context;
         }
 
         @Override
         public void run() {
+            prefs = PreferenceManager.getDefaultSharedPreferences(context);
             Gson gson = new Gson();
 
             try {
-                InputStream is = assets.open("book/contents.json");
+                InputStream is = context.getAssets().open("book/contents.json");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 contents=gson.fromJson(reader, BookContents.class);
                 EventBus.getDefault().post(new BookLoadedEvent(contents));
@@ -60,4 +64,7 @@ public class ModelFragment extends Fragment{
         }
     }
 
+    public SharedPreferences getPrefs() {
+        return prefs;
+    }
 }
