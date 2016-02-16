@@ -14,11 +14,12 @@ import de.greenrobot.event.EventBus;
 
 public class EmPubLiteActivity extends Activity {
 
+    private static final String MODEL = "model";
     private static final String PREF_LAST_POSITION = "lastPosition";
     private static final String PREF_SAVE_LAST_POSITION = "saveLastPosition";
+    private static final String PREF_KEEP_SCREEN_ON="keepScreenOn";
     private ViewPager pager;
     private ContentsAdapter adapter;
-    private static final String MODEL = "model";
     private ModelFragment mFragment;
 
     @Override
@@ -42,6 +43,7 @@ public class EmPubLiteActivity extends Activity {
             if (prefs.getBoolean(PREF_SAVE_LAST_POSITION, false)) {
                 pager.setCurrentItem(prefs.getInt(PREF_LAST_POSITION, 0));
             }
+            pager.setKeepScreenOn(prefs.getBoolean(PREF_KEEP_SCREEN_ON, false));
         }
     }
 
@@ -59,10 +61,15 @@ public class EmPubLiteActivity extends Activity {
         if (adapter == null) {
             mFragment = (ModelFragment) getFragmentManager().findFragmentByTag(MODEL);
             if (mFragment == null) {
-                getFragmentManager().beginTransaction().add(new ModelFragment(), MODEL).commit();
+                mFragment = new ModelFragment();
+                getFragmentManager().beginTransaction().add(mFragment, MODEL).commit();
             } else if (mFragment.getBook() != null) {
                 setupPager(mFragment.getBook());
             }
+        }
+        if (mFragment.getPrefs() != null) {
+            pager.setKeepScreenOn(mFragment.getPrefs()
+                    .getBoolean(PREF_KEEP_SCREEN_ON, false));
         }
     }
 
