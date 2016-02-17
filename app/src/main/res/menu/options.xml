@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/notes"
+            android:icon="@mipmap/ic_mode_edit_black_48dp"
+            android:showAsAction="ifRoom|withText"
+            android:title="@string/notes">
+    </item>
     <item
         android:id="@+id/help"
         android:icon="@mipmap/ic_help_black_48dp"

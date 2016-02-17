@@ -1,7 +1,20 @@
 package com.tyomsky.empublite.event;
 
-/**
- * Created by artem.degtyarev on 16.02.2016.
- */
 public class NoteLoadedEvent {
+
+    int position;
+    String prose;
+
+    public NoteLoadedEvent(int position, String prose) {
+        this.position = position;
+        this.prose = prose;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public String getProse() {
+        return prose;
+    }
 }
