@@ -1,18 +1,24 @@
 package com.tyomsky.empublite;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.*;
 import android.widget.EditText;
+import android.widget.ShareActionProvider;
 import com.tyomsky.empublite.event.NoteLoadedEvent;
 import de.greenrobot.event.EventBus;
 
-public class NoteFragment extends Fragment {
+public class NoteFragment extends Fragment implements TextWatcher {
 
     private static final String KEY_POSITION = "position";
     private EditText editor;
+    private ShareActionProvider sap;
+    private Intent shareIntent = new Intent(Intent.ACTION_SEND).setType("text/plain");
 
     static NoteFragment newInstance(int position) {
         NoteFragment fragment = new NoteFragment();
@@ -27,6 +33,7 @@ public class NoteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.editor, container, false);
         editor = (EditText) result.findViewById(R.id.editor);
+        editor.addTextChangedListener(this);
         return result;
     }
 
@@ -39,6 +46,8 @@ public class NoteFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.notes, menu);
+        sap = (ShareActionProvider) menu.findItem(R.id.share).getActionProvider();
+        sap.setShareIntent(shareIntent);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -84,6 +93,21 @@ public class NoteFragment extends Fragment {
 
     private Contract getContract() {
         return (Contract) getActivity();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        //do nothing
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        //do nothing
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        shareIntent.putExtra(Intent.EXTRA_TEXT, s.toString());
     }
 
     public interface Contract {

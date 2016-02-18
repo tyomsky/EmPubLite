@@ -19,4 +19,6 @@
     <string name="hint">Enter notes here…</string>
     <string name="notes">Notes</string>
     <string name="delete">Delete</string>
+    <string name="share">Share</string>
+    <string name="download_update">Download update</string>
 </resources>

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import com.tyomsky.empublite.event.BookLoadedEvent;
+import com.tyomsky.empublite.service.DownloadCheckService;
 import de.greenrobot.event.EventBus;
 
 public class EmPubLiteActivity extends Activity {
@@ -109,6 +110,9 @@ public class EmPubLiteActivity extends Activity {
                 i = new Intent(this, NoteActivity.class);
                 i.putExtra(NoteActivity.EXTRA_POSITION, pager.getCurrentItem());
                 startActivity(i);
+                return true;
+            case R.id.update:
+                startService(new Intent(this, DownloadCheckService.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
