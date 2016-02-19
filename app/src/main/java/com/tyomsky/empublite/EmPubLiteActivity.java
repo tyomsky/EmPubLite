@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import com.tyomsky.empublite.event.BookLoadedEvent;
+import com.tyomsky.empublite.receiver.UpdateReceiver;
 import com.tyomsky.empublite.service.DownloadCheckService;
 import de.greenrobot.event.EventBus;
 
@@ -18,7 +19,7 @@ public class EmPubLiteActivity extends Activity {
     private static final String MODEL = "model";
     private static final String PREF_LAST_POSITION = "lastPosition";
     private static final String PREF_SAVE_LAST_POSITION = "saveLastPosition";
-    private static final String PREF_KEEP_SCREEN_ON="keepScreenOn";
+    private static final String PREF_KEEP_SCREEN_ON = "keepScreenOn";
     private ViewPager pager;
     private ContentsAdapter adapter;
     private ModelFragment mFragment;
@@ -31,6 +32,8 @@ public class EmPubLiteActivity extends Activity {
 
         setContentView(R.layout.main);
         pager = (ViewPager) findViewById(R.id.pager);
+
+        UpdateReceiver.scheduleAlarm(this);
     }
 
     private void setupPager(BookContents contents) {
@@ -123,12 +126,11 @@ public class EmPubLiteActivity extends Activity {
     }
 
     private void setupStrictMode() {
-        StrictMode.ThreadPolicy.Builder builder=
+        StrictMode.ThreadPolicy.Builder builder =
                 new StrictMode.ThreadPolicy.Builder().detectNetwork();
         if (BuildConfig.DEBUG) {
             builder.penaltyDeath();
-        }
-        else {
+        } else {
             builder.penaltyLog();
         }
         StrictMode.setThreadPolicy(builder.build());

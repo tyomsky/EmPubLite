@@ -1,11 +1,19 @@
 package com.tyomsky.empublite.service;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.tyomsky.empublite.BookUpdateInfo;
 import com.tyomsky.empublite.BookUpdateInterface;
+import com.tyomsky.empublite.EmPubLiteActivity;
+import com.tyomsky.empublite.R;
+import com.tyomsky.empublite.event.BookUpdatedEvent;
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.NoSubscriberEvent;
 import retrofit.RestAdapter;
 
 import java.io.*;
@@ -20,6 +28,7 @@ public class DownloadCheckService extends IntentService {
     private static final String OUR_BOOK_DATE="20120418";
     private static final String UPDATE_FILENAME="book.zip";
     public static final String UPDATE_BASEDIR="updates";
+    private static final int NOTIFY_ID=1337;
 
     public DownloadCheckService(String name) {
         super("DownloadCheckService");
@@ -36,7 +45,10 @@ public class DownloadCheckService extends IntentService {
 
                 unzip(book, updateDir);
                 book.delete();
-                EventBus.getDefault().post(new BookUpdateInfo());
+
+                EventBus.getDefault().register(this);
+                EventBus.getDefault().post(new BookUpdatedEvent());
+                EventBus.getDefault().unregister(this);
             }
         } catch (Exception e) {
             Log.e(getClass().getSimpleName(),
@@ -106,5 +118,19 @@ public class DownloadCheckService extends IntentService {
             zis.closeEntry();
         }
         zis.close();
+    }
+
+    public void onEvent(NoSubscriberEvent event) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        Intent toLaunch = new Intent(this, EmPubLiteActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, toLaunch, 0);
+
+        builder.setAutoCancel(true).setContentIntent(pi)
+                .setContentTitle(getString(R.string.update_complete))
+                .setContentText(getString(R.string.update_desc))
+                .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                .setTicker(getString(R.string.update_complete));
+        NotificationManager mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mgr.notify(NOTIFY_ID, builder.build());
     }
 }

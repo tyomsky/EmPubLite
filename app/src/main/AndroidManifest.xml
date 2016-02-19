@@ -3,6 +3,7 @@
     package="com.tyomsky.empublite">
 
     <uses-permission android:name="ANDROID.PERMISSION.INTERNET"/>
+    <uses-permission android:name="ANDROID.PERMISSION.RECEIVE_BOOT_COMPLETED"/>
 
     <supports-screens
         android:largeScreens="true"
@@ -27,6 +28,11 @@
         <activity android:name=".SimpleContentActivity"/>
         <activity android:name=".Preferences"/>
         <activity android:name=".NoteActivity"/>
+        <receiver android:name="com.tyomsky.empublite.receiver.UpdateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
